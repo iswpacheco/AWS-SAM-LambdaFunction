@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: 'Hello World Application'
+
+Globals:
+  Function:
+    Timeout: 5
+
+
+
+Resources:
+  MyLibLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: functions/hello-world/my_lib_layer
+      CompatibleRuntimes:
+        - python3.7
+    Metadata:
+      BuildMethod: python3.7
+  HelloWorldApp:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/hello-world
+      Handler: helloWorld.lambda_handler
+      Runtime: python3.7
+      Layers:
+      - !Ref MyLibLayer
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  HelloWorldApp:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - HelloWorldApp
+      - Arn

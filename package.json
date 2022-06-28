@@ -1,0 +1,13 @@
+{
+  "name": "stepfunctionmap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "sam build && sam package --s3-bucket sam-examples --output-template-file packaged-dev.yaml && sam deploy --template-file packaged-dev.yaml --stack-name helloapp --capabilities CAPABILITY_IAM "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
